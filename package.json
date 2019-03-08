@@ -1,0 +1,26 @@
+{
+  "name": "express-template-log-reg-typescript",
+  "version": "1.0.0",
+  "description": "Template de Register-Login en Express con Typescript",
+  "main": "./app/build/server.js",
+  "scripts": {
+    "test": "jest --watchAll --verbose --runInBand",
+    "build": "tsc -w"
+  },
+  "author": "sebamawa",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.16.1",
+    "@types/express-handlebars": "0.0.30",
+    "@types/mongoose": "^5.3.21",
+    "@types/passport": "^1.0.0",
+    "@types/passport-local": "^1.0.33"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "mongoose": "^5.4.17",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0"
+  }
+}
