@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const passport_1 = __importDefault(require("passport"));
-//require('../../app/models/auth/passport/local-auth');
+require('../../app/models/auth/passport/local-auth');
 //import * from '../../app/models/auth/passport/local-auth';
 class UserRoutes {
     constructor() {

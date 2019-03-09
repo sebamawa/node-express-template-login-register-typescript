@@ -9,7 +9,6 @@ const passport_1 = __importDefault(require("passport"));
 const properties_1 = __importDefault(require("./app/config/properties"));
 const user_routes_1 = __importDefault(require("./app/routes/user.routes"));
 const database_1 = __importDefault(require("./app/config/database"));
-require('./app/models/auth/passport/local-auth');
 // class for server
 class Server {
     constructor() {
@@ -33,6 +32,7 @@ class Server {
         this.app.set('view engine', '.hbs'); // debe ir luego del seteo anterior
     }
     middlewares() {
+        this.app.use(express_1.default.urlencoded({ extended: false })); // indica que datos se reciben desde formulario (NO imagenes) -> NECESARIO
         this.app.use(passport_1.default.initialize());
         this.app.use(passport_1.default.session());
     }

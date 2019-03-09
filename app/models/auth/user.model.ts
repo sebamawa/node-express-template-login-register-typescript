@@ -1,11 +1,19 @@
 /**
  * Define modelo (y esquema en mongodb) de datos para la coleccion Users
  */
+import * as mongoose from 'mongoose';
+//import { Document, Schema, Model, model} from "mongoose";
+//import {User} from './User';
 
-import mongoose from 'mongoose';
-const { Schema } = mongoose;
+// // interface IUser extends mongoose.Document {
+//  export interface IUser extends Document {
+//     name: string;
+//     email: string;
+//     password: string
+//  };
 
-const userSchema = new Schema({
+//const UserSchema = new Schema({ 
+const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -26,20 +34,11 @@ const userSchema = new Schema({
     timestamps: true // guarda en la coleccion la fecha de creacion y actualizacion
 });
 
-// agrega metodos a esquema
-userSchema.statics = {
+//const UserModel = mongoose.model<User>('User', UserSchema); // funciona
+//const UserModel = model('User', UserSchema);
+const UserModel = mongoose.model('User', UserSchema); // funciona
+export {UserModel};
 
-    create: function(userData: any, cb: any) {
-        const user = new this(userData); 
-        user.save(cb);
-    },
 
-    login: function(query: any, cb: any) {
-        this.find(query, cb);
-    }
-}
 
-const userModel = mongoose.model('User', userSchema); // crea tabla Users
-console.log('BASE DE DATOS CREADA');
 
-export default userModel;

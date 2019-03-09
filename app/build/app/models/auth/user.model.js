@@ -1,14 +1,26 @@
 "use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Define modelo (y esquema en mongodb) de datos para la coleccion Users
  */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const { Schema } = mongoose_1.default;
-const userSchema = new Schema({
+const mongoose = __importStar(require("mongoose"));
+//import { Document, Schema, Model, model} from "mongoose";
+//import {User} from './User';
+// // interface IUser extends mongoose.Document {
+//  export interface IUser extends Document {
+//     name: string;
+//     email: string;
+//     password: string
+//  };
+//const UserSchema = new Schema({ 
+const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -28,16 +40,7 @@ const userSchema = new Schema({
 }, {
     timestamps: true // guarda en la coleccion la fecha de creacion y actualizacion
 });
-// agrega metodos a esquema
-userSchema.statics = {
-    create: function (userData, cb) {
-        const user = new this(userData);
-        user.save(cb);
-    },
-    login: function (query, cb) {
-        this.find(query, cb);
-    }
-};
-const userModel = mongoose_1.default.model('User', userSchema); // crea tabla Users
-console.log('BASE DE DATOS CREADA');
-exports.default = userModel;
+//const UserModel = mongoose.model<User>('User', UserSchema); // funciona
+//const UserModel = model('User', UserSchema);
+const UserModel = mongoose.model('User', UserSchema); // funciona
+exports.UserModel = UserModel;

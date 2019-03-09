@@ -6,8 +6,6 @@ import config from './app/config/properties';
 import userRoutes from './app/routes/user.routes';
 import DB from './app/config/database';
 
-require('./app/models/auth/passport/local-auth');
-
 // class for server
 class Server {
     public app: Application;
@@ -36,6 +34,7 @@ class Server {
     }
 
     middlewares(): void {
+        this.app.use(express.urlencoded({extended: false})); // indica que datos se reciben desde formulario (NO imagenes) -> NECESARIO
         this.app.use(passport.initialize());
         this.app.use(passport.session());
     }
