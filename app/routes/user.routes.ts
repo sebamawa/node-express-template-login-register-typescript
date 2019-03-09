@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import passport from 'passport';
-require('../../app/models/auth/passport/local-auth');
+//require('../../app/models/auth/passport/local-auth');
 //import * from '../../app/models/auth/passport/local-auth';
 
 class UserRoutes {
@@ -21,8 +21,8 @@ class UserRoutes {
             res.render('auth/login');
         });        
         this.router.post('/users/login', passport.authenticate('local-login', {
-            successRedirect: '/users/login',
-            failureRedirect: '/users/profile',
+            successRedirect: '/users/profile',
+            failureRedirect: '/users/login',
             //failureFlash: true
         }));
 

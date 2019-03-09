@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const passport_1 = __importDefault(require("passport"));
-require('../../app/models/auth/passport/local-auth');
+//require('../../app/models/auth/passport/local-auth');
 //import * from '../../app/models/auth/passport/local-auth';
 class UserRoutes {
     constructor() {
@@ -22,8 +22,8 @@ class UserRoutes {
             res.render('auth/login');
         });
         this.router.post('/users/login', passport_1.default.authenticate('local-login', {
-            successRedirect: '/users/login',
-            failureRedirect: '/users/profile',
+            successRedirect: '/users/profile',
+            failureRedirect: '/users/login',
         }));
         // register routes
         this.router.get('/users/register', (req, res) => {

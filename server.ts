@@ -1,9 +1,12 @@
 import express, {Application} from 'express';
 import exphbs from 'express-handlebars';
+import passport from 'passport';
 
 import config from './app/config/properties';
 import userRoutes from './app/routes/user.routes';
 import DB from './app/config/database';
+
+require('./app/models/auth/passport/local-auth');
 
 // class for server
 class Server {
@@ -15,6 +18,7 @@ class Server {
         DB(); 
 
         this.config();
+        this.middlewares();
         this.routes();
     }    
 
@@ -29,6 +33,11 @@ class Server {
             extname: '.hbs'
         }));
         this.app.set('view engine', '.hbs'); // debe ir luego del seteo anterior
+    }
+
+    middlewares(): void {
+        this.app.use(passport.initialize());
+        this.app.use(passport.session());
     }
 
     routes(): void {

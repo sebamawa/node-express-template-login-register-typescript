@@ -5,9 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const express_handlebars_1 = __importDefault(require("express-handlebars"));
+const passport_1 = __importDefault(require("passport"));
 const properties_1 = __importDefault(require("./app/config/properties"));
 const user_routes_1 = __importDefault(require("./app/routes/user.routes"));
 const database_1 = __importDefault(require("./app/config/database"));
+require('./app/models/auth/passport/local-auth');
 // class for server
 class Server {
     constructor() {
@@ -15,6 +17,7 @@ class Server {
         this.app = express_1.default();
         database_1.default();
         this.config();
+        this.middlewares();
         this.routes();
     }
     config() {
@@ -28,6 +31,10 @@ class Server {
             extname: '.hbs'
         }));
         this.app.set('view engine', '.hbs'); // debe ir luego del seteo anterior
+    }
+    middlewares() {
+        this.app.use(passport_1.default.initialize());
+        this.app.use(passport_1.default.session());
     }
     routes() {
         // home route
