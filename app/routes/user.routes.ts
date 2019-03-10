@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import passport from 'passport';
 require('../../app/models/auth/passport/local-auth');
+
 //import * from '../../app/models/auth/passport/local-auth';
 
 class UserRoutes {
