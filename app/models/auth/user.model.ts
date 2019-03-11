@@ -34,6 +34,17 @@ const UserSchema = new mongoose.Schema({
     timestamps: true // guarda en la coleccion la fecha de creacion y actualizacion
 });
 
+// agrega metodos al esquema
+UserSchema.statics = {
+    create: function(userData: any, cb: any) {
+        const user: any = new this(userData);
+        user.save(cb);
+    },
+    login: function(query: any, cb: any) {
+        this.find(query, cb);
+    }
+}
+
 //const UserModel = mongoose.model<User>('User', UserSchema); // funciona
 //const UserModel = model('User', UserSchema);
 const UserModel = mongoose.model('User', UserSchema); // funciona

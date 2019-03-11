@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const session = require('express-session');
+const flash = require('connect-flash');
 const express_handlebars_1 = __importDefault(require("express-handlebars"));
 const passport_1 = __importDefault(require("passport"));
 const properties_1 = __importDefault(require("./app/config/properties"));
@@ -33,8 +35,22 @@ class Server {
     }
     middlewares() {
         this.app.use(express_1.default.urlencoded({ extended: false })); // indica que datos se reciben desde formulario (NO imagenes) -> NECESARIO
+        this.app.use(session({
+            secret: 'mysecretsession',
+            resave: false,
+            saveUninitialized: false
+        }));
+        this.app.use(flash());
         this.app.use(passport_1.default.initialize());
         this.app.use(passport_1.default.session());
+        // guardo usuario logueado si lo hay o guardo mensaje de error (se muestran en la view)
+        this.app.use((req, res, next) => {
+            this.app.locals.user = req.user;
+            //this.app.registerMessage = req // TODO
+            this.app.locals.loginMessage = req.flash('loginMessage');
+            console.log(req.flash('loginMessage'));
+            next();
+        });
     }
     routes() {
         // home route

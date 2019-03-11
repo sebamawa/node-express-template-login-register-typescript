@@ -1,4 +1,6 @@
-import express, {Application} from 'express';
+import express, { Application } from 'express';
+const session = require('express-session');
+const flash = require('connect-flash');
 import exphbs from 'express-handlebars';
 import passport from 'passport';
 
@@ -35,8 +37,24 @@ class Server {
 
     middlewares(): void {
         this.app.use(express.urlencoded({extended: false})); // indica que datos se reciben desde formulario (NO imagenes) -> NECESARIO
+
+        this.app.use(session({
+            secret: 'mysecretsession',
+            resave: false,
+            saveUninitialized: false
+        }));
+        this.app.use(flash());
         this.app.use(passport.initialize());
         this.app.use(passport.session());
+
+        // guardo usuario logueado si lo hay o guardo mensaje de error (se muestran en la view)
+        this.app.use((req: any, res, next) => {
+            this.app.locals.user = req.user;
+            //this.app.registerMessage = req // TODO
+            this.app.locals.loginMessage = req.flash('loginMessage');
+            console.log(req.flash('loginMessage'));
+            next();
+        });
     }
 
     routes(): void {

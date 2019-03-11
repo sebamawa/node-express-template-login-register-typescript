@@ -14,20 +14,7 @@
           </li>
       </ul>
       <ul class="navbar-nav ml-auto">
-        {{!-- {{#if user}}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Notes 
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/notes">All Notes</a>
-              <a class="dropdown-item" href="/notes/add">Add A Note</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/users/logout">Logout</a>
-            </div>
-          </li>
-        {{else}} --}}
-        {{#if user}}
+        {{#if user}} <!-- user es una variable global recuperada en server.ts de la session -->
            <li class="nav-item">
                <a class="nav-link"> {{user.name}} </a>
           </li>
