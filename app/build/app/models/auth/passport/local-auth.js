@@ -39,6 +39,7 @@ passport_1.default.use('local-login', new LocalStrategy({
         //return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
         return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
     }
-    //console.log(user);
-    return done(null, user); // se puede agregar mj de logueo ok
+    //req.flash('success_msg', `Bienvenido ${user.name}`);
+    //console.log(req.locals);
+    return done(null, user, req.flash('success_msg', `Bienvenido ${user.name}`)); // se puede agregar mj de logueo ok
 })));

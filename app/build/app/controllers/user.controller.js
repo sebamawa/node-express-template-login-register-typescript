@@ -9,6 +9,9 @@ var UserController;
             email: req.body.email,
             password: req.body.password
         };
+        newUser.password = user_model_1.UserModel.encryptPassword(newUser.password, () => { });
+        // encripta password
+        //newUser
         user_model_1.UserModel.create(newUser, (err, user) => {
             if (err)
                 console.log(err);

@@ -43,16 +43,23 @@ class Server {
             resave: false,
             saveUninitialized: false
         }));
-        this.app.use(flash());
+        this.app.use(flash()); // para enviar mensajes entre views
         this.app.use(passport.initialize());
         this.app.use(passport.session());
+
+        // global variables
+        this.app.use((req: any, res, next) => {
+            res.locals.success_msg = req.flash('success_msg'); // mensaje de exito en logueo y registro
+            res.locals.error_msg = req.flash('error_msg'); // mensaje de error
+            next();
+        });
 
         // guardo usuario logueado si lo hay o guardo mensaje de error (se muestran en la view)
         this.app.use((req: any, res, next) => {
             this.app.locals.user = req.user;
             //this.app.registerMessage = req // TODO
             this.app.locals.loginMessage = req.flash('loginMessage');
-            console.log(req.flash('loginMessage'));
+            //console.log(req.flash('loginMessage'));
             next();
         });
     }

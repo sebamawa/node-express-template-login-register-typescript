@@ -2,6 +2,8 @@
  * Define modelo (y esquema en mongodb) de datos para la coleccion Users
  */
 import * as mongoose from 'mongoose';
+// import * as bcrypt from 'bcryptjs'; // no funciona 
+const bcrypt = require('bcryptjs');
 //import { Document, Schema, Model, model} from "mongoose";
 //import {User} from './User';
 
@@ -35,6 +37,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 // agrega metodos al esquema
+// Otra forma: UserSchema.methods.nombreMetodo = ...
 UserSchema.statics = {
     create: function(userData: any, cb: any) {
         const user: any = new this(userData);
@@ -42,6 +45,16 @@ UserSchema.statics = {
     },
     login: function(query: any, cb: any) {
         this.find(query, cb);
+    },
+    // encripta password del usuario
+    encryptPassword: function(password: String) {
+        const salt =  bcrypt.genSalt(10); // aplica algoritmo 10 veces (para generar hash)
+        const hash = bcrypt.hash(password, salt);
+        return hash;
+    },
+    // compara passwords del modelo de datos contra la del usuario
+    matchPassword: async function(password: any) {
+        return await bcrypt.compare(password, this.password);
     }
 }
 

@@ -9,6 +9,10 @@ namespace UserController {
             password: req.body.password
         }
 
+        newUser.password = UserModel.encryptPassword(newUser.password, ()=>{});
+
+        // encripta password
+        //newUser
         UserModel.create(newUser, (err: any, user: any) => { // create es funcion definida en el model (user.model.ts)
             if (err) console.log(err);
 
