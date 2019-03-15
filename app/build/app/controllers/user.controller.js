@@ -13,14 +13,14 @@ var UserController;
 (function (UserController) {
     function createUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            let newUser = new user_model_1.User({
+            let newUser = new user_model_1.UserModel({
                 name: req.body.name,
                 email: req.body.email,
                 password: req.body.password
             });
             // encripta password
             newUser.password = yield newUser.encryptPassword(newUser.password);
-            console.log(newUser.password);
+            //console.log(newUser.password);
             // inserta usuario
             user_model_1.UserModel.create(newUser, (err, user) => {
                 if (err)

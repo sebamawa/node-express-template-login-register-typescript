@@ -16,26 +16,26 @@ const bcrypt = require('bcryptjs');
 //  };
 
 // 1) CLASS
-export class User {
+export interface User {
     name: string;
     email: string;
     password: string;
 
-    constructor(userData: {name: string, email: string, password: string}) {
-        this.name = userData.name;
-        this.email = userData.email;
-        this.password = userData.password;
-    }
+    // constructor(userData: {name: string, email: string, password: string}) {
+    //     this.name = userData.name;
+    //     this.email = userData.email;
+    //     this.password = userData.password;
+    // }
 
-    async encryptPassword(password: any) {
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(password, salt);
-        return hash;
-    }
+    // async encryptPassword(password: any) {
+    //     const salt = await bcrypt.genSalt(10);
+    //     const hash = await bcrypt.hash(password, salt);
+    //     return hash;
+    // }
 
-    async matchPassword(password: string){
-        return await bcrypt.compare(password, this.password);
-    }
+    // async matchPassword(password: string){
+    //     return await bcrypt.compare(password, this.password);
+    // }
 }
 
 // 2) SCHEMA
@@ -62,11 +62,24 @@ const UserSchema = new Schema({
 });
 
 // register each method at schema
-UserSchema.method('encryptPassword', User.prototype.encryptPassword);
-UserSchema.method('matchPassword', User.prototype.matchPassword);
+//UserSchema.method('encryptPassword', User.prototype.encryptPassword);
+//UserSchema.method('matchPassword', User.prototype.matchPassword);
+
+UserSchema.methods.encryptPassword = async (password: string) => {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+    return hash;    
+}
+
+UserSchema.methods.matchPassword = async function(password: string) {
+    return await bcrypt.compare(password, this.password);  
+}
 
 // 2) Document
-export interface UserDocument extends User, Document{ }
+export interface UserDocument extends User, Document{ 
+    encryptPassword(password: string): string;
+    matchPassword(password: string): boolean;
+}
 
 
 // 3) Model

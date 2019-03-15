@@ -15,35 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 // import * as bcrypt from 'bcryptjs'; // no funciona 
 const bcrypt = require('bcryptjs');
-//import { Document, Schema, Model, model} from "mongoose";
-//import {User} from './User';
-// // interface IUser extends mongoose.Document {
-//  export interface IUser extends Document {
-//     name: string;
-//     email: string;
-//     password: string
-//  };
-// 1) CLASS
-class User {
-    constructor(userData) {
-        this.name = userData.name;
-        this.email = userData.email;
-        this.password = userData.password;
-    }
-    encryptPassword(password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const salt = yield bcrypt.genSalt(10);
-            const hash = yield bcrypt.hash(password, salt);
-            return hash;
-        });
-    }
-    matchPassword(password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield bcrypt.compare(password, this.password);
-        });
-    }
-}
-exports.User = User;
 // 2) SCHEMA
 const UserSchema = new mongoose_1.Schema({
     //const UserSchema = new mongoose.Schema({
@@ -67,7 +38,17 @@ const UserSchema = new mongoose_1.Schema({
     timestamps: true // guarda en la coleccion la fecha de creacion y actualizacion
 });
 // register each method at schema
-UserSchema.method('encryptPassword', User.prototype.encryptPassword);
-UserSchema.method('matchPassword', User.prototype.matchPassword);
+//UserSchema.method('encryptPassword', User.prototype.encryptPassword);
+//UserSchema.method('matchPassword', User.prototype.matchPassword);
+UserSchema.methods.encryptPassword = (password) => __awaiter(this, void 0, void 0, function* () {
+    const salt = yield bcrypt.genSalt(10);
+    const hash = yield bcrypt.hash(password, salt);
+    return hash;
+});
+UserSchema.methods.matchPassword = function (password) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield bcrypt.compare(password, this.password);
+    });
+};
 // 3) Model
 exports.UserModel = mongoose_1.model('User', UserSchema);
