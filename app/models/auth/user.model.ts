@@ -1,7 +1,8 @@
 /**
  * Define modelo (y esquema en mongodb) de datos para la coleccion Users
  */
-import * as mongoose from 'mongoose';
+//import * as mongoose from 'mongoose';
+import { Document, Schema, model } from 'mongoose';
 // import * as bcrypt from 'bcryptjs'; // no funciona 
 const bcrypt = require('bcryptjs');
 //import { Document, Schema, Model, model} from "mongoose";
@@ -14,8 +15,32 @@ const bcrypt = require('bcryptjs');
 //     password: string
 //  };
 
-//const UserSchema = new Schema({ 
-const UserSchema = new mongoose.Schema({
+// 1) CLASS
+export class User {
+    name: string;
+    email: string;
+    password: string;
+
+    constructor(userData: {name: string, email: string, password: string}) {
+        this.name = userData.name;
+        this.email = userData.email;
+        this.password = userData.password;
+    }
+
+    async encryptPassword(password: any) {
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(password, salt);
+        return hash;
+    }
+
+    async matchPassword(password: string){
+        return await bcrypt.compare(password, this.password);
+    }
+}
+
+// 2) SCHEMA
+const UserSchema = new Schema({ 
+//const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -36,32 +61,16 @@ const UserSchema = new mongoose.Schema({
     timestamps: true // guarda en la coleccion la fecha de creacion y actualizacion
 });
 
-// agrega metodos al esquema
-// Otra forma: UserSchema.methods.nombreMetodo = ...
-UserSchema.statics = {
-    create: function(userData: any, cb: any) {
-        const user: any = new this(userData);
-        user.save(cb);
-    },
-    login: function(query: any, cb: any) {
-        this.find(query, cb);
-    },
-    // encripta password del usuario
-    encryptPassword: function(password: String) {
-        const salt =  bcrypt.genSalt(10); // aplica algoritmo 10 veces (para generar hash)
-        const hash = bcrypt.hash(password, salt);
-        return hash;
-    },
-    // compara passwords del modelo de datos contra la del usuario
-    matchPassword: async function(password: any) {
-        return await bcrypt.compare(password, this.password);
-    }
-}
+// register each method at schema
+UserSchema.method('encryptPassword', User.prototype.encryptPassword);
+UserSchema.method('matchPassword', User.prototype.matchPassword);
 
-//const UserModel = mongoose.model<User>('User', UserSchema); // funciona
-//const UserModel = model('User', UserSchema);
-const UserModel = mongoose.model('User', UserSchema); // funciona
-export {UserModel};
+// 2) Document
+export interface UserDocument extends User, Document{ }
+
+
+// 3) Model
+export const UserModel = model<UserDocument>('User', UserSchema);
 
 
 

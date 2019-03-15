@@ -7,18 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Define modelo (y esquema en mongodb) de datos para la coleccion Users
  */
-const mongoose = __importStar(require("mongoose"));
+//import * as mongoose from 'mongoose';
+const mongoose_1 = require("mongoose");
 // import * as bcrypt from 'bcryptjs'; // no funciona 
 const bcrypt = require('bcryptjs');
 //import { Document, Schema, Model, model} from "mongoose";
@@ -29,8 +23,30 @@ const bcrypt = require('bcryptjs');
 //     email: string;
 //     password: string
 //  };
-//const UserSchema = new Schema({ 
-const UserSchema = new mongoose.Schema({
+// 1) CLASS
+class User {
+    constructor(userData) {
+        this.name = userData.name;
+        this.email = userData.email;
+        this.password = userData.password;
+    }
+    encryptPassword(password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const salt = yield bcrypt.genSalt(10);
+            const hash = yield bcrypt.hash(password, salt);
+            return hash;
+        });
+    }
+    matchPassword(password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield bcrypt.compare(password, this.password);
+        });
+    }
+}
+exports.User = User;
+// 2) SCHEMA
+const UserSchema = new mongoose_1.Schema({
+    //const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -50,30 +66,8 @@ const UserSchema = new mongoose.Schema({
 }, {
     timestamps: true // guarda en la coleccion la fecha de creacion y actualizacion
 });
-// agrega metodos al esquema
-// Otra forma: UserSchema.methods.nombreMetodo = ...
-UserSchema.statics = {
-    create: function (userData, cb) {
-        const user = new this(userData);
-        user.save(cb);
-    },
-    login: function (query, cb) {
-        this.find(query, cb);
-    },
-    // encripta password del usuario
-    encryptPassword: function (password) {
-        const salt = bcrypt.genSalt(10); // aplica algoritmo 10 veces (para generar hash)
-        const hash = bcrypt.hash(password, salt);
-        return hash;
-    },
-    // compara passwords del modelo de datos contra la del usuario
-    matchPassword: function (password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield bcrypt.compare(password, this.password);
-        });
-    }
-};
-//const UserModel = mongoose.model<User>('User', UserSchema); // funciona
-//const UserModel = model('User', UserSchema);
-const UserModel = mongoose.model('User', UserSchema); // funciona
-exports.UserModel = UserModel;
+// register each method at schema
+UserSchema.method('encryptPassword', User.prototype.encryptPassword);
+UserSchema.method('matchPassword', User.prototype.matchPassword);
+// 3) Model
+exports.UserModel = mongoose_1.model('User', UserSchema);

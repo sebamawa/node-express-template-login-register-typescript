@@ -1,20 +1,21 @@
-import { UserModel } from '../models/auth/user.model';
+import { User, UserDocument, UserModel } from '../models/auth/user.model';
 
 namespace UserController {
 
-    export function createUser(req: any, res: any) { // (req: Response, res: Response) {
-        const newUser = {
+    export async function createUser(req: any, res: any) { // (req: Response, res: Response) {
+        let newUser = new User({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password
-        }
-
-        newUser.password = UserModel.encryptPassword(newUser.password, ()=>{});
+        });
 
         // encripta password
-        //newUser
+        newUser.password = await newUser.encryptPassword(newUser.password);
+        console.log(newUser.password);
+        // inserta usuario
         UserModel.create(newUser, (err: any, user: any) => { // create es funcion definida en el model (user.model.ts)
             if (err) console.log(err);
+
 
             res.render('auth/login');
         });
