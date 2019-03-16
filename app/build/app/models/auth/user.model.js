@@ -40,6 +40,7 @@ const UserSchema = new mongoose_1.Schema({
 // register each method at schema
 //UserSchema.method('encryptPassword', User.prototype.encryptPassword);
 //UserSchema.method('matchPassword', User.prototype.matchPassword);
+// Instance methods
 UserSchema.methods.encryptPassword = (password) => __awaiter(this, void 0, void 0, function* () {
     const salt = yield bcrypt.genSalt(10);
     const hash = yield bcrypt.hash(password, salt);

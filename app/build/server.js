@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const session = require('express-session');
 const flash = require('connect-flash');
+//import flash from 'connect-flash';
 const express_handlebars_1 = __importDefault(require("express-handlebars"));
 const passport_1 = __importDefault(require("passport"));
 const properties_1 = __importDefault(require("./app/config/properties"));

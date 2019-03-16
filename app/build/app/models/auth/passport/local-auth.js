@@ -29,7 +29,7 @@ passport_1.default.use('local-login', new LocalStrategy({
     passReqToCallback: true
 }, (req, email, password, done) => __awaiter(this, void 0, void 0, function* () {
     let user = yield user_model_1.UserModel.findOne({ email: email }); // bd query (asynchrone method)
-    // si no se pone await devuelve una promesa (pero se quiere q ejecute)                                      
+    // si no se pone await devuelve una promesa (pero se quiere q ejecute)                                                                          
     if (!user) {
         // null para error, false para usuario (no existe usuario)
         //return done(null, false, req.flash('loginMessage', 'No user found'));

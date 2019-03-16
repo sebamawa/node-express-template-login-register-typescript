@@ -23,8 +23,10 @@ var UserController;
             //console.log(newUser.password);
             // inserta usuario
             user_model_1.UserModel.create(newUser, (err, user) => {
-                if (err)
+                if (err) {
                     console.log(err);
+                    res.send('Hubo un error en el registro');
+                }
                 res.render('auth/login');
             });
         });

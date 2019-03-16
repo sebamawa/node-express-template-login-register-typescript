@@ -13,9 +13,11 @@ namespace UserController {
         newUser.password = await newUser.encryptPassword(newUser.password);
         //console.log(newUser.password);
         // inserta usuario
-        UserModel.create(newUser, (err: any, user: any) => { // create es funcion definida en el model (user.model.ts)
-            if (err) console.log(err);
-
+        UserModel.create(newUser, (err: any, user: any) => { // create es ima funcion del model
+            if (err) {
+                console.log(err);
+                res.send('Hubo un error en el registro');
+            }    
 
             res.render('auth/login');
         });
@@ -43,7 +45,7 @@ namespace UserController {
                 }
             }
         });
-    }
+     }
 }   
 
 export { UserController };

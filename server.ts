@@ -1,6 +1,7 @@
 import express, { Application } from 'express';
 const session = require('express-session');
 const flash = require('connect-flash');
+//import flash from 'connect-flash';
 import exphbs from 'express-handlebars';
 import passport from 'passport';
 
