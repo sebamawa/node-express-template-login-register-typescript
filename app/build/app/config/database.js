@@ -8,7 +8,10 @@ const properties_1 = __importDefault(require("./properties"));
 exports.default = () => {
     mongoose_1.default.connect(properties_1.default.DB_URL, { useNewUrlParser: true })
         .then(() => console.log(`Mongo connected on ${properties_1.default.DB_URL}`))
-        .catch(err => console.log(`Connection has error ${err}`));
+        .catch(err => {
+        console.log(`Connection has error ${err}`);
+        process.exit(0); // kill process if connection to the database fails
+    });
     process.on('SIGINT', () => {
         mongoose_1.default.connection.close(() => {
             console.log('Mongo is disconnected');

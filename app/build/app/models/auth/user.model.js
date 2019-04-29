@@ -49,6 +49,9 @@ UserSchema.methods.encryptPassword = (password) => __awaiter(this, void 0, void 
 UserSchema.methods.matchPassword = function (password) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield bcrypt.compare(password, this.password);
+        // let matchPasswords: boolean = await bcrypt.compare(password, this.password);
+        // console.log(matchPasswords);
+        // return matchPasswords;
     });
 };
 // 3) Model

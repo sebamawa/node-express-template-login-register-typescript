@@ -4,8 +4,11 @@ import config from './properties';
 export default () => {
     mongoose.connect(config.DB_URL, {useNewUrlParser: true})
         .then(() => console.log(`Mongo connected on ${config.DB_URL}`))
-        .catch(err => console.log(`Connection has error ${err}`))
-
+        .catch(err => { 
+            console.log(`Connection has error ${err}`); 
+            process.exit(0); // kill process if connection to the database fails
+        })
+          
     process.on('SIGINT', () => {
         mongoose.connection.close(() => {
             console.log('Mongo is disconnected');

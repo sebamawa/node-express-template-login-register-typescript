@@ -27,8 +27,10 @@ passport.use('local-login', new LocalStrategy({
         
         return done(null, false, req.flash('loginMessage', 'No user found'));
     }
-    if (!user.matchPassword(password)) {
-        //return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
+
+    let matchPass: boolean = await user.matchPassword(password);
+    // console.log(matchPass);
+    if (!matchPass) {
         return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
     }
     //req.flash('success_msg', `Bienvenido ${user.name}`);
