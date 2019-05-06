@@ -12,7 +12,12 @@ import { UserModel } from '../models/auth/user.model';
         });
 
         // encripta password
-        newUser.password = await newUser.encryptPassword(newUser.password);
+        try {
+            newUser.password = await newUser.encryptPassword(newUser.password);
+        } catch (err) {
+            console.log(`Error en la encriptacion del password: ${err}`);
+            return res.send('Hubo un error. Intente el registro nuevamente');
+        }    
 
         // inserta usuario usando model de mongoose
         await UserModel.create(newUser, function(err: Error) { // create es una funcion del model mongoose

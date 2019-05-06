@@ -45,6 +45,7 @@ UserSchema.methods.encryptPassword = (password) => __awaiter(this, void 0, void 
     const salt = yield bcrypt.genSalt(10);
     const hash = yield bcrypt.hash(password, salt);
     return hash;
+    //throw(new Error('Hubo un error en la encriptacion'));
 });
 UserSchema.methods.matchPassword = function (password) {
     return __awaiter(this, void 0, void 0, function* () {

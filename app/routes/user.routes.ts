@@ -23,7 +23,7 @@ class UserRoutes {
         //     failureRedirect: '/users/login',
         //     failureFlash: true
         // }));
-        this.router.post('/users/login', UserController.loginUser); // METODO DE CONTROLADOR QUEDA CARGANDO
+        this.router.post('/users/login', UserController.loginUser);
 
         // profile route
         // se protege ruta con la funcion pasada en el segundo parametro (implementada al final)

@@ -45,6 +45,7 @@ UserSchema.methods.encryptPassword = async (password: string) => {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
     return hash;    
+    //throw(new Error('Hubo un error en la encriptacion'));
 }
 
 UserSchema.methods.matchPassword = async function(password: string) {

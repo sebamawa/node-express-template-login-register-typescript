@@ -19,7 +19,13 @@ module.exports.createUser = (req, res, next) => __awaiter(this, void 0, void 0, 
         password: req.body.password
     });
     // encripta password
-    newUser.password = yield newUser.encryptPassword(newUser.password);
+    try {
+        newUser.password = yield newUser.encryptPassword(newUser.password);
+    }
+    catch (err) {
+        console.log(`Error en la encriptacion del password: ${err}`);
+        return res.send('Hubo un error. Intente el registro nuevamente');
+    }
     // inserta usuario usando model de mongoose
     yield user_model_1.UserModel.create(newUser, function (err) {
         if (err) {
