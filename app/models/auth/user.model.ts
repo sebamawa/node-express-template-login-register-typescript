@@ -48,10 +48,7 @@ UserSchema.methods.encryptPassword = async (password: string) => {
 }
 
 UserSchema.methods.matchPassword = async function(password: string) {
-    return await bcrypt.compare(password, this.password);  
-    // let matchPasswords: boolean = await bcrypt.compare(password, this.password);
-    // console.log(matchPasswords);
-    // return matchPasswords;
+    return await bcrypt.compare(password, this.password); // devuelve promesa
 }
 
 // 2) Document

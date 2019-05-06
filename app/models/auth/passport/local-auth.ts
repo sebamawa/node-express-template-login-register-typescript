@@ -2,11 +2,11 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import { UserModel} from '../user.model';
 
+ const LocalStrategy = passportLocal.Strategy;
+// import { LocalStrategy } from 'passport-local';
 
-const LocalStrategy = passportLocal.Strategy;
-
-passport.serializeUser<any, any>((user, done) => {
-    done(null, user.id);
+passport.serializeUser<any, any>((user, done) => { // done es un callback para indicar cuando termina la serializacion
+    done(null, user.id); // null porque no hay error
 });
 
 passport.deserializeUser<any, any>(async (id, done) => {
@@ -19,17 +19,22 @@ passport.use('local-login', new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
 }, async (req: any, email, password, done) => {
-    let user = await UserModel.findOne({email: email}); // bd query (asynchrone method)
-                                    // si no se pone await devuelve una promesa (pero se quiere q ejecute)                                                                          
+    // si no se pone await devuelve una promesa (pero se quiere q ejecute)
+    let user = await UserModel.findOne({email: email}, function(err){
+        if (err) {
+            console.log(err);
+            return done(null, false, req.flash('loginMessage', 'Error when connecting to the database'));
+        }    
+    }); // bd query (asynchrone method)
+                                                                                                              
     if (!user) {
         // null para error, false para usuario (no existe usuario)
         //return done(null, false, req.flash('loginMessage', 'No user found'));
         
-        return done(null, false, req.flash('loginMessage', 'No user found'));
+        return done(null, false, req.flash('loginMessage', `Not exists a user with email: ${email}`)); // false porque no se logro autentificacion
     }
 
     let matchPass: boolean = await user.matchPassword(password);
-    // console.log(matchPass);
     if (!matchPass) {
         return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
     }

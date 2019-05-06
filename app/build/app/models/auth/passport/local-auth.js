@@ -16,8 +16,9 @@ exports.passport = passport_1.default;
 const passport_local_1 = __importDefault(require("passport-local"));
 const user_model_1 = require("../user.model");
 const LocalStrategy = passport_local_1.default.Strategy;
+// import { LocalStrategy } from 'passport-local';
 passport_1.default.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user.id); // null porque no hay error
 });
 passport_1.default.deserializeUser((id, done) => __awaiter(this, void 0, void 0, function* () {
     const user = yield user_model_1.UserModel.findById(id);
@@ -28,15 +29,19 @@ passport_1.default.use('local-login', new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
 }, (req, email, password, done) => __awaiter(this, void 0, void 0, function* () {
-    let user = yield user_model_1.UserModel.findOne({ email: email }); // bd query (asynchrone method)
-    // si no se pone await devuelve una promesa (pero se quiere q ejecute)                                                                          
+    // si no se pone await devuelve una promesa (pero se quiere q ejecute)
+    let user = yield user_model_1.UserModel.findOne({ email: email }, function (err) {
+        if (err) {
+            console.log(err);
+            return done(null, false, req.flash('loginMessage', 'Error when connecting to the database'));
+        }
+    }); // bd query (asynchrone method)
     if (!user) {
         // null para error, false para usuario (no existe usuario)
         //return done(null, false, req.flash('loginMessage', 'No user found'));
-        return done(null, false, req.flash('loginMessage', 'No user found'));
+        return done(null, false, req.flash('loginMessage', `Not exists a user with email: ${email}`)); // false porque no se logro autentificacion
     }
     let matchPass = yield user.matchPassword(password);
-    // console.log(matchPass);
     if (!matchPass) {
         return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
     }

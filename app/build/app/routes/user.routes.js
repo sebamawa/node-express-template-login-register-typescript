@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-//import passport from 'passport';
-const local_auth_1 = require("../../app/models/auth/passport/local-auth"); // importa con funciones agregadas en passport (serializeUser(), use(), etc)
 //require('../../app/models/auth/passport/local-auth');
-const user_controller_1 = require("../controllers/user.controller");
+//import { UserController } from '../controllers/user.controller';
+//import UserController from '../controllers/user.controller';
+const UserController = require('../controllers/user.controller.js');
 class UserRoutes {
     constructor() {
         this.router = express_1.Router();
@@ -15,11 +15,12 @@ class UserRoutes {
         this.router.get('/users/login', (req, res) => {
             res.render('auth/login');
         });
-        this.router.post('/users/login', local_auth_1.passport.authenticate('local-login', {
-            successRedirect: '/users/profile',
-            failureRedirect: '/users/login',
-            failureFlash: true
-        }));
+        // this.router.post('/users/login', passport.authenticate('local-login', {
+        //     successRedirect: '/users/profile',
+        //     failureRedirect: '/users/login',
+        //     failureFlash: true
+        // }));
+        this.router.post('/users/login', UserController.loginUser); // METODO DE CONTROLADOR QUEDA CARGANDO
         // profile route
         // se protege ruta con la funcion pasada en el segundo parametro (implementada al final)
         this.router.get('/users/profile', this.isAuthenticated, (req, res) => {
@@ -29,17 +30,12 @@ class UserRoutes {
         this.router.get('/users/register', (req, res) => {
             res.render('auth/register');
         });
-        this.router.post('/users/register', (req, res) => {
-            user_controller_1.UserController.createUser(req, res);
-        });
+        this.router.post('/users/register', UserController.createUser);
         // logout
-        this.router.get('/users/logout', (req, res, next) => {
-            req.logout(); // elimina sesion
-            res.redirect('/');
-        });
+        this.router.get('/users/logout', this.isAuthenticated, UserController.logout);
     } // config()
     isAuthenticated(req, res, next) {
-        if (req.isAuthenticated()) {
+        if (req.isAuthenticated()) { // isAuthenticated() metodo agregado por passport a req
             return next(); // si usuario auntenticado continua con la siguiente ruta
         }
         res.redirect('/');
