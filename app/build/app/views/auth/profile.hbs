@@ -1,4 +1,4 @@
-{{#if success_msg}}
+{{!-- {{#if success_msg}}
     <div class="alert alert-success alert-dismissible fade show" name="success-alert" role="alert">
         {{success_msg}}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -7,5 +7,24 @@
     </div>
 {{/if}}
 
+<h1>Profile</h1> --}}
+
 <h1>Profile</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mt-4 text-center">
+            <div class="card-header">
+                <h5>Do you want delete the account?</h5>
+                <div class="card-body">
+                    <form action="/users/delete_account" method="POST">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-danger btn-block">Delete account</button>                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 

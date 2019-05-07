@@ -1,7 +1,24 @@
-{{#if success_msg}}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{success_msg}}
+<div class="row">
+    {{#if success_msg}}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{success_msg}}
+        </div>
+    {{/if}}
+    <h1>Profile</h1>
+</div>
+<div class="row">
+    <div class="col-md-4 mx-auto">
+        <div class="card mt-4 text-center">
+            <div class="card-header">
+                <h3>Delete account</h3>
+                <div class="card-body">
+                    <form action="/users/login" method="POST">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-{{/if}}
-
-<h1>Profile</h1>
+</div>

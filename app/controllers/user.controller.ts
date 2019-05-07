@@ -58,7 +58,7 @@ import { UserModel } from '../models/auth/user.model';
     }
 
     //export function loginUser(req: any, res: any) {
-    module.exports.loginUser = (req:any,res:any,next:any) => { // CORREGIR
+    module.exports.loginUser = (req: any,res: any,next: any) => { // CORREGIR
         // Usando passport
         // console.log('Login user');
         passport.authenticate('local-login', 
@@ -68,21 +68,24 @@ import { UserModel } from '../models/auth/user.model';
             failureFlash: true
         }
         )(req, res, next) // passport.authenticate() retorna una funcion   
-    }    
-        
-        // , (err:any, user, info) => {
-        //     if (err) next(err);
-        //     if (!user) {
-        //         return res.status(400).send('Email o contraseña no validos');
-        //     } 
-        //     req.login(user, (err: any) => {
-        //         next(err);
-        //         // res.send('Login exitoso');
-        //     });
-        // })(req, res, next); // passport.authenticate() retorna una funcion que se invoca (para que opere passport)
+    }
+    
+    module.exports.deleteUserAccount = async (req: any, res: any) => { 
+        UserModel.deleteOne({_id: req.user._id}, function(err) {
+            if (err) {
+                console.log('Hubo un error al intentar borrar la cuenta');
+                res.flash('error_msg', `No se pudo eliminar la cuenta del usuario - ${req.user.name} -`);
+                req.logout();
+                res.redirect('/');
+            }
+            req.flash('success_msg', `Se elimino la cuenta del usuario - ${req.user.name} - correctamente.`);
+            req.logout();
+            console.log('Cuenta borrada correctamente');
+            res.redirect('/');
+        });
+    }
 
-
-    // Sin usar passport    
+    // Login sin usar passport    
     //     const userData = {
     //         email: req.body.email,
     //         password: req.body.password
@@ -105,6 +108,6 @@ import { UserModel } from '../models/auth/user.model';
     //         }
     //     });
     // }
-//}   
+//}  
 
 //export { UserController };

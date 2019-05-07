@@ -39,6 +39,9 @@ class UserRoutes {
         
         // logout
         this.router.get('/users/logout', this.isAuthenticated, UserController.logout);
+
+        // delete user account
+        this.router.post('/users/delete_account', this.isAuthenticated, UserController.deleteUserAccount);
     } // config()
 
     isAuthenticated(req: any, res: any, next: any): void {

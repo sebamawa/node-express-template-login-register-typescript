@@ -33,6 +33,8 @@ class UserRoutes {
         this.router.post('/users/register', UserController.createUser);
         // logout
         this.router.get('/users/logout', this.isAuthenticated, UserController.logout);
+        // delete user account
+        this.router.post('/users/delete_account', this.isAuthenticated, UserController.deleteUserAccount);
     } // config()
     isAuthenticated(req, res, next) {
         if (req.isAuthenticated()) { // isAuthenticated() metodo agregado por passport a req

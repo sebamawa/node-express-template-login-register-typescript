@@ -15,6 +15,12 @@
 
     {{> navigation }}
 
+    {{#if success_msg}}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{success_msg}}
+        </div>
+    {{/if}}    
+
     <main class="container p-5">
       {{> loginMessage }} 
       {{!-- {{> errors }} --}} 
