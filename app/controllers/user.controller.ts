@@ -71,7 +71,7 @@ import { UserModel } from '../models/auth/user.model';
     }
     
     module.exports.deleteUserAccount = async (req: any, res: any) => { 
-        UserModel.deleteOne({_id: req.user._id}, function(err) {
+        await UserModel.deleteOne({_id: req.user._id}, function(err) {
             if (err) {
                 console.log('Hubo un error al intentar borrar la cuenta');
                 res.flash('error_msg', `No se pudo eliminar la cuenta del usuario - ${req.user.name} -`);

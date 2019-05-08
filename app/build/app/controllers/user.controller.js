@@ -70,7 +70,7 @@ module.exports.loginUser = (req, res, next) => {
     })(req, res, next); // passport.authenticate() retorna una funcion   
 };
 module.exports.deleteUserAccount = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    user_model_1.UserModel.deleteOne({ _id: req.user._id }, function (err) {
+    yield user_model_1.UserModel.deleteOne({ _id: req.user._id }, function (err) {
         if (err) {
             console.log('Hubo un error al intentar borrar la cuenta');
             res.flash('error_msg', `No se pudo eliminar la cuenta del usuario - ${req.user.name} -`);

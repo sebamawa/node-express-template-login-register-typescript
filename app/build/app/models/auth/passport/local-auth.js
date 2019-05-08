@@ -33,7 +33,7 @@ passport_1.default.use('local-login', new LocalStrategy({
     let user = yield user_model_1.UserModel.findOne({ email: email }, function (err) {
         if (err) {
             console.log(err);
-            return done(null, false, req.flash('loginMessage', 'Error when connecting to the database'));
+            return done(null, false, req.flash('error_msg', 'Error when connecting to the database'));
         }
     }); // bd query (asynchrone method)
     if (!user) {
