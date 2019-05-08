@@ -1,3 +1,4 @@
+import { UserDocument } from './../user.model';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import { UserModel} from '../user.model';
@@ -20,12 +21,22 @@ passport.use('local-login', new LocalStrategy({
     passReqToCallback: true
 }, async (req: any, email, password, done) => {
     // si no se pone await devuelve una promesa (pero se quiere q ejecute)
-    let user = await UserModel.findOne({email: email}, function(err){
-        if (err) {
-            console.log(err);
-            return done(null, false, req.flash('error_msg', 'Error when connecting to the database'));
-        }    
-    }); // bd query (asynchrone method)
+
+    // con callback
+    // let user = await UserModel.findOne({email: email}, function(err){
+    //     if (err) {
+    //         console.log(err);
+    //          return done(null, false, req.flash('error_msg', 'Error when connecting to the database'));
+    //     }    
+    // }); // bd query (asynchrone method)
+
+    // con try-catch
+    let user: any;
+    try {
+        user = await UserModel.findOne({email: email});
+    } catch (err) {
+        return done(null, false, req.flash('error_msg', 'Error with the database'));
+    }
                                                                                                               
     if (!user) {
         // null para error, false para usuario (no existe usuario)

@@ -30,12 +30,21 @@ passport_1.default.use('local-login', new LocalStrategy({
     passReqToCallback: true
 }, (req, email, password, done) => __awaiter(this, void 0, void 0, function* () {
     // si no se pone await devuelve una promesa (pero se quiere q ejecute)
-    let user = yield user_model_1.UserModel.findOne({ email: email }, function (err) {
-        if (err) {
-            console.log(err);
-            return done(null, false, req.flash('error_msg', 'Error when connecting to the database'));
-        }
-    }); // bd query (asynchrone method)
+    // con callback
+    // let user = await UserModel.findOne({email: email}, function(err){
+    //     if (err) {
+    //         console.log(err);
+    //          return done(null, false, req.flash('error_msg', 'Error when connecting to the database'));
+    //     }    
+    // }); // bd query (asynchrone method)
+    // con try-catch
+    let user;
+    try {
+        user = yield user_model_1.UserModel.findOne({ email: email });
+    }
+    catch (err) {
+        return done(null, false, req.flash('error_msg', 'Error with the database'));
+    }
     if (!user) {
         // null para error, false para usuario (no existe usuario)
         //return done(null, false, req.flash('loginMessage', 'No user found'));

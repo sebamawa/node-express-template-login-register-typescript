@@ -71,18 +71,30 @@ import { UserModel } from '../models/auth/user.model';
     }
     
     module.exports.deleteUserAccount = async (req: any, res: any) => { 
-        await UserModel.deleteOne({_id: req.user._id}, function(err) {
-            if (err) {
-                console.log('Hubo un error al intentar borrar la cuenta');
-                res.flash('error_msg', `No se pudo eliminar la cuenta del usuario - ${req.user.name} -`);
-                req.logout();
-                res.redirect('/');
-            }
-            req.flash('success_msg', `Se elimino la cuenta del usuario - ${req.user.name} - correctamente.`);
+        // con try-catch
+        console.log('Metodo delete');
+        try {
+            await UserModel.deleteOne({_id: req.user._id});
+        } catch (err) {
+            console.log('Hubo un error en el borrado de la cuenta de usuario');
+            res.flash('error_msg', `No se pudo eliminar la cuenta del usuario - ${req.user.name} -`);
             req.logout();
-            console.log('Cuenta borrada correctamente');
             res.redirect('/');
-        });
+        }
+
+        // // con callback
+        // await UserModel.deleteOne({_id: req.user._id}, function(err) {
+        //     if (err) {
+        //         console.log('Hubo un error al intentar borrar la cuenta');
+        //         res.flash('error_msg', `No se pudo eliminar la cuenta del usuario - ${req.user.name} -`);
+        //         req.logout();
+        //         res.redirect('/');
+        //     }
+        //     req.flash('success_msg', `Se elimino la cuenta del usuario - ${req.user.name} - correctamente.`);
+        //     req.logout();
+        //     console.log('Cuenta borrada correctamente');
+        //     res.redirect('/');
+        // });
     }
 
     // Login sin usar passport    
