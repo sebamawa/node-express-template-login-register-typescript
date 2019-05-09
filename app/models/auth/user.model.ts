@@ -49,7 +49,7 @@ UserSchema.methods.encryptPassword = async (password: string) => {
 }
 
 UserSchema.methods.matchPassword = async function(password: string) {
-    return await bcrypt.compare(password, this.password); // devuelve promesa
+    return bcrypt.compare(password, this.password); // devuelve promesa
 }
 
 // 2) Document

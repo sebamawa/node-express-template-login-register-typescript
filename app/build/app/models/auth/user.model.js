@@ -49,7 +49,7 @@ UserSchema.methods.encryptPassword = (password) => __awaiter(this, void 0, void 
 });
 UserSchema.methods.matchPassword = function (password) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield bcrypt.compare(password, this.password); // devuelve promesa
+        return bcrypt.compare(password, this.password); // devuelve promesa
     });
 };
 // 3) Model
