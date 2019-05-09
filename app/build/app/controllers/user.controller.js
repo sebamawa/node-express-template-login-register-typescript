@@ -71,14 +71,13 @@ module.exports.loginUser = (req, res, next) => {
 };
 module.exports.deleteUserAccount = (req, res) => __awaiter(this, void 0, void 0, function* () {
     // con try-catch
-    console.log('Metodo delete');
     try {
         yield user_model_1.UserModel.deleteOne({ _id: req.user._id });
     }
     catch (err) {
         console.log('Hubo un error en el borrado de la cuenta de usuario');
         res.flash('error_msg', `No se pudo eliminar la cuenta del usuario - ${req.user.name} -`);
-        //req.logout();
+        req.logout();
         res.redirect('/');
     }
     // // con callback

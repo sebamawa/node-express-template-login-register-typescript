@@ -72,7 +72,6 @@ import { UserModel } from '../models/auth/user.model';
     
     module.exports.deleteUserAccount = async (req: any, res: any) => { 
         // con try-catch
-        console.log('Metodo delete');
         try {
             await UserModel.deleteOne({_id: req.user._id});
         } catch (err) {

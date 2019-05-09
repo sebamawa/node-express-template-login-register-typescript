@@ -3,7 +3,7 @@ import config from './properties';
 
 export default () => {
     const options: ConnectionOptions = {
-        // reconnectTries: Number.MAX_VALUE // Never stop trying to reconnect
+        //reconnectTries: 10, // Never stop trying to reconnect
         useNewUrlParser: true,
         keepAliveInitialDelay: 300000    
     };

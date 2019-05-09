@@ -7,7 +7,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const properties_1 = __importDefault(require("./properties"));
 exports.default = () => {
     const options = {
-        // reconnectTries: Number.MAX_VALUE // Never stop trying to reconnect
+        //reconnectTries: 10, // Never stop trying to reconnect
         useNewUrlParser: true,
         keepAliveInitialDelay: 300000
     };

@@ -1,4 +1,3 @@
-import { UserDocument } from './../user.model';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import { UserModel} from '../user.model';
@@ -31,26 +30,36 @@ passport.use('local-login', new LocalStrategy({
     // }); // bd query (asynchrone method)
 
     // con try-catch
-    let user: any;
     try {
-        user = await UserModel.findOne({email: email});
+        let user: any = await UserModel.findOne({email: email});
+        let matchPass = await user.matchPassword(password);
+        //const matchPass: boolean = (await UserModel.findOne({email: email}).matchPassword(password);
+        if (!matchPass) {
+            return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
+        }
+        if (!user) {            
+            return done(null, false, req.flash('loginMessage', `Not exists a user with email: ${email}`)); // false porque no se logro autentificacion
+        }        
+        return done(null, user, req.flash('success_msg', `Bienvenido ${user.name}`)); // se puede agregar mj de logueo ok           
     } catch (err) {
-        return done(null, false, req.flash('error_msg', 'Error with the database'));
+        console.log(err);
+        return done(null, false, req.flash('error_msg', 'An error ocurred in the login'));
     }
+    
                                                                                                               
-    if (!user) {
-        // null para error, false para usuario (no existe usuario)
-        //return done(null, false, req.flash('loginMessage', 'No user found'));
+    // if (!user) {
+    //     // null para error, false para usuario (no existe usuario)
+    //     //return done(null, false, req.flash('loginMessage', 'No user found'));
         
-        return done(null, false, req.flash('loginMessage', `Not exists a user with email: ${email}`)); // false porque no se logro autentificacion
-    }
+    //     return done(null, false, req.flash('loginMessage', `Not exists a user with email: ${email}`)); // false porque no se logro autentificacion
+    // }
 
-    let matchPass: boolean = await user.matchPassword(password);
-    if (!matchPass) {
-        return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
-    }
-    //req.flash('success_msg', `Bienvenido ${user.name}`);
-    return done(null, user, req.flash('success_msg', `Bienvenido ${user.name}`)); // se puede agregar mj de logueo ok            
+    // let matchPass: boolean = await user.matchPassword(password);
+    // if (!matchPass) {
+    //     return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
+    // }
+    // //req.flash('success_msg', `Bienvenido ${user.name}`);
+    // return done(null, user, req.flash('success_msg', `Bienvenido ${user.name}`)); // se puede agregar mj de logueo ok            
                                                                       
 
     // con promesa
