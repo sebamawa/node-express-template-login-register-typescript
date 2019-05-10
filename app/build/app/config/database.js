@@ -32,13 +32,13 @@ exports.default = () => {
     // si se llega a los 30 intentos de reconexion al hacer un request post
     // donde se use algun metodo de modelo (create, findone, etc) sigue intentando reconectar 
     // sin matar el proceso de node
-    mongoose_1.default.connection.on('disconnected', function () {
-        console.log('Se perdio conexion a la BD');
-        setTimeout(() => {
-            connect();
-        }, 20000);
-    });
-    mongoose_1.default.connection.on('reconnected', function () {
-        console.log('Conexion re-establecida a la BD');
-    });
+    // mongoose.connection.on('disconnected', function(){
+    //     console.log('Se perdio conexion a la BD');
+    //     setTimeout(() => {
+    //         connect();
+    //     }, 20000);
+    // }); 
+    // mongoose.connection.on('reconnected', function(){
+    //     console.log('Conexion re-establecida a la BD'); 
+    // });  
 };

@@ -32,19 +32,26 @@ passport.use('local-login', new LocalStrategy({
     // con try-catch
     try {
         let user: any = await UserModel.findOne({email: email});
-      
+        //console.log(user);
+
+        // no se encontro usuario para el email
+        if (!user) {            
+            return done(null, false, req.flash('loginMessage', `Not exists a user with email: ${email}`)); // false porque no se logro autentificacion        
+        }
+
+        // verifico password
+        console.log(typeof( user.matchPassword(password)) === Promise);
         let matchPass: boolean = await user.matchPassword(password);
-        //const matchPass: boolean = (await UserModel.findOne({email: email}).matchPassword(password);
         if (!matchPass) {
             return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
         }
-        if (!user) {            
-            return done(null, false, req.flash('loginMessage', `Not exists a user with email: ${email}`)); // false porque no se logro autentificacion
-        }      
+        
+        // credenciales de usuario ok
         return done(null, user, req.flash('success_msg', `Bienvenido ${user.name}`)); // se puede agregar mj de logueo ok           
     } catch (err) {
-        console.log(err);
-        return done(null, false, req.flash('error_msg', 'An error ocurred in the login'));
+        //console.log(err);
+
+        return done(null, false, req.flash('error_msg', `Error: ${err.name}`));
     }
     
                                                                                                               

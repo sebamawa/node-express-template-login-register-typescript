@@ -37,7 +37,7 @@ class Server {
     }
 
     middlewares(): void {
-        this.app.use(express.urlencoded({extended: false})); // indica que datos se reciben desde formulario (NO imagenes) -> NECESARIO
+        this.app.use(express.urlencoded({extended: false})); // indica que datos se reciben desde formulario (NO imagenes) -> config necesaria
 
         this.app.use(session({
             secret: 'mysecretsession',

@@ -30,7 +30,10 @@ module.exports.createUser = (req, res, next) => __awaiter(this, void 0, void 0, 
     yield user_model_1.UserModel.create(newUser, function (err) {
         if (err) {
             console.log(err);
-            return res.send('Hubo un error en el registro'); // si no se usa return mata el proceso de node
+            req.flash('error_msg', `Error: ${err.name}`);
+            //res.send('Hubo un error en el registro');
+            //return res.send('Hubo un error en el registro'); // si no se usa return mata el proceso de node
+            return res.redirect('/users/register');
         }
         //res.render('auth/login');
         // login luego de registro (se usa metodo login() agreagado por passport a req)
@@ -70,13 +73,16 @@ module.exports.loginUser = (req, res, next) => {
     })(req, res, next); // passport.authenticate() retorna una funcion   
 };
 module.exports.deleteUserAccount = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    // con try-catch
+    console.log('Delete account');
     try {
         yield user_model_1.UserModel.deleteOne({ _id: req.user._id });
+        req.flash('success_msg', `Se elimino correctamente la cuenta del usuario: ${req.user.name}`);
+        req.logout();
+        res.redirect('/');
     }
     catch (err) {
-        console.log('Hubo un error en el borrado de la cuenta de usuario');
-        res.flash('error_msg', `No se pudo eliminar la cuenta del usuario - ${req.user.name} -`);
+        console.log(err);
+        req.flash('error_msg', `Error: ${err.name} -`);
         req.logout();
         res.redirect('/');
     }

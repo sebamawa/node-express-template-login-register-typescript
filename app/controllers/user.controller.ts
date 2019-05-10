@@ -23,7 +23,10 @@ import { UserModel } from '../models/auth/user.model';
         await UserModel.create(newUser, function(err: Error) { // create es una funcion del model mongoose
             if (err) {
                 console.log(err);
-                return res.send('Hubo un error en el registro'); // si no se usa return mata el proceso de node
+                req.flash('error_msg', `Error: ${err.name}`);
+                //res.send('Hubo un error en el registro');
+                //return res.send('Hubo un error en el registro'); // si no se usa return mata el proceso de node
+                return res.redirect('/users/register');  
             }    
 
             //res.render('auth/login');
@@ -58,7 +61,7 @@ import { UserModel } from '../models/auth/user.model';
     }
 
     //export function loginUser(req: any, res: any) {
-    module.exports.loginUser = (req: any,res: any,next: any) => { // CORREGIR
+    module.exports.loginUser = (req: any,res: any,next: any) => { 
         // Usando passport
         // console.log('Login user');
         passport.authenticate('local-login', 
@@ -71,12 +74,15 @@ import { UserModel } from '../models/auth/user.model';
     }
     
     module.exports.deleteUserAccount = async (req: any, res: any) => { 
-        // con try-catch
+        console.log('Delete account');
         try {
             await UserModel.deleteOne({_id: req.user._id});
+            req.flash('success_msg', `Se elimino correctamente la cuenta del usuario: ${req.user.name}`);
+            req.logout();
+            res.redirect('/');
         } catch (err) {
-            console.log('Hubo un error en el borrado de la cuenta de usuario');
-            res.flash('error_msg', `No se pudo eliminar la cuenta del usuario - ${req.user.name} -`);
+            console.log(err);
+            req.flash('error_msg', `Error: ${err.name} -`);
             req.logout();
             res.redirect('/');
         }
