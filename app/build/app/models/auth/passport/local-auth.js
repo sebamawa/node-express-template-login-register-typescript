@@ -46,7 +46,7 @@ passport_1.default.use('local-login', new LocalStrategy({
             return done(null, false, req.flash('loginMessage', `Not exists a user with email: ${email}`)); // false porque no se logro autentificacion        
         }
         // verifico password
-        console.log(typeof (user.matchPassword(password)));
+        //console.log(typeof( user.matchPassword(password)) === Promise);
         let matchPass = yield user.matchPassword(password);
         if (!matchPass) {
             return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
@@ -55,7 +55,7 @@ passport_1.default.use('local-login', new LocalStrategy({
         return done(null, user, req.flash('success_msg', `Bienvenido ${user.name}`)); // se puede agregar mj de logueo ok           
     }
     catch (err) {
-        //console.log(err);
+        console.log(err);
         return done(null, false, req.flash('error_msg', `Error: ${err.name}`));
     }
     // if (!user) {

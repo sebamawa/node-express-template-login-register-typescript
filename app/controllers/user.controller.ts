@@ -74,18 +74,27 @@ import { UserModel } from '../models/auth/user.model';
     }
     
     module.exports.deleteUserAccount = async (req: any, res: any) => { 
-        console.log('Delete account');
-        try {
-            await UserModel.deleteOne({_id: req.user._id});
-            req.flash('success_msg', `Se elimino correctamente la cuenta del usuario: ${req.user.name}`);
-            req.logout();
-            res.redirect('/');
-        } catch (err) {
-            console.log(err);
-            req.flash('error_msg', `Error: ${err.name} -`);
-            req.logout();
-            res.redirect('/');
-        }
+        console.log(`Delete account de usuario: ${req.user.name}`);
+        UserModel.deleteOne({_id: req.user._id}, function(err) {
+            if (err) console.log(err);
+            res.redirec('/');
+        });
+        // try {
+        //     await UserModel.deleteOne({_id: req.user._id});
+        // } catch (err) {
+        //     console.log(`Error: ${err}`);
+        // }
+        // try {
+        //     await UserModel.deleteOne({_id: req.user._id});
+        //     req.flash('success_msg', `Se elimino correctamente la cuenta del usuario: ${req.user.name}`);
+        //     req.logout();
+        //     res.redirect('/');
+        // } catch (err) {
+        //     //console.log(err);
+        //     req.flash('error_msg', `Error: ${err.name} -`);
+        //     req.logout();
+        //     res.redirect('/');
+        //}
 
         // // con callback
         // await UserModel.deleteOne({_id: req.user._id}, function(err) {

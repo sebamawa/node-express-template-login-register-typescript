@@ -73,19 +73,28 @@ module.exports.loginUser = (req, res, next) => {
     })(req, res, next); // passport.authenticate() retorna una funcion   
 };
 module.exports.deleteUserAccount = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    console.log('Delete account');
-    try {
-        yield user_model_1.UserModel.deleteOne({ _id: req.user._id });
-        req.flash('success_msg', `Se elimino correctamente la cuenta del usuario: ${req.user.name}`);
-        req.logout();
-        res.redirect('/');
-    }
-    catch (err) {
-        console.log(err);
-        req.flash('error_msg', `Error: ${err.name} -`);
-        req.logout();
-        res.redirect('/');
-    }
+    console.log(`Delete account de usuario: ${req.user.name}`);
+    user_model_1.UserModel.deleteOne({ _id: req.user._id }, function (err) {
+        if (err)
+            console.log(err);
+        res.redirec('/');
+    });
+    // try {
+    //     await UserModel.deleteOne({_id: req.user._id});
+    // } catch (err) {
+    //     console.log(`Error: ${err}`);
+    // }
+    // try {
+    //     await UserModel.deleteOne({_id: req.user._id});
+    //     req.flash('success_msg', `Se elimino correctamente la cuenta del usuario: ${req.user.name}`);
+    //     req.logout();
+    //     res.redirect('/');
+    // } catch (err) {
+    //     //console.log(err);
+    //     req.flash('error_msg', `Error: ${err.name} -`);
+    //     req.logout();
+    //     res.redirect('/');
+    //}
     // // con callback
     // await UserModel.deleteOne({_id: req.user._id}, function(err) {
     //     if (err) {

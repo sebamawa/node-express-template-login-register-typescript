@@ -4,29 +4,70 @@ import config from './properties';
 export default () => {
     const options: ConnectionOptions = {
         //reconnectTries: 10, // Never stop trying to reconnect
-        useNewUrlParser: true,
-        keepAliveInitialDelay: 300000    
+        useNewUrlParser: true
+        //bufferMaxEntries: 0   
+        // server: {
+        //     reconnectTries: Number.MAX_VALUE,
+        //     reconnectInterval: 1000
+        // }               
     };
 
-    // mongoose.connect(config.DB_URL, options)...
-    const connect = function() {
-        mongoose.connect(config.DB_URL, options) 
-        .then(() => console.log(`Mongo connected on: ${config.DB_URL}`))
-        .catch(err => { 
+    const connect = async function() { // connect() retorna una promesa
+        try {
+            await mongoose.connect(config.DB_URL, options);
+            console.log(`Mongo connected on: ${config.DB_URL}`);
+            
+            // // close de Mongoose connection, when receiving SIGINT
+            // process.on('SIGINT', function() {
+            //     mongoose.connection.close(() => {
+            //         console.log('Mongo is disconnected');
+            //         process.exit(0);
+            //     })
+            // })                
+        } catch(err) {
             console.log(`Connection has error: ${err}`); 
-            //process.exit(0); // kill process if connection to the database fails on first attempt
-        })
+        }         
+    }
+
+    // // mongoose.connect(config.DB_URL, options)...
+    // const connect = function() {
+    //     mongoose.connect(config.DB_URL, options) 
+    //     .then(() => console.log(`Mongo connected on: ${config.DB_URL}`))
+    //     .catch(err => { 
+    //         console.log(`Connection has error: ${err}`); 
+    //         //process.exit(0); // kill process if connection to the database fails on first attempt
+    //     })
           
-        // close de Mongoose connection, when receiving SIGINT
-        process.on('SIGINT', () => {
-        mongoose.connection.close(() => {
-            console.log('Mongo is disconnected');
-            process.exit(0);
-        })
-        })
-    }      
+    //     // close de Mongoose connection, when receiving SIGINT
+    //     process.on('SIGINT', function() {
+    //     mongoose.connection.close(() => {
+    //         console.log('Mongo is disconnected');
+    //         process.exit(0);
+    //     })
+    //     })
+    // }   
 
     connect();
+
+    mongoose.connection.on('reconnectFailed', function(){
+        console.log('Finalizaron 30 intentos de reconexion. Se intenta de nuevo.');
+        //mongoose.connection.close();
+        connect();
+    });      
+
+//    mongoose.connection.on('error', function(){
+//         console.log(`Error`);
+//     });    
+
+    // mongoose.connection.on('connected', function(){
+    //     isConnectedBefore = true;
+    //     console.log('Connection established to MongoDB');
+    // }); 
+    // mongoose.connection.on('disconnected', function(){
+    //     console.log('Se perdio conexion a la BD');
+    //     if (!isConnectedBefore)
+    //         connect();
+    // });    
 
     // si se desconecta a la BD intenta conectarse a los 20000 ms
     // si se llega a los 30 intentos de reconexion al hacer un request post
@@ -41,6 +82,11 @@ export default () => {
     // mongoose.connection.on('reconnected', function(){
     //     console.log('Conexion re-establecida a la BD'); 
     // });  
+    // mongoose.connection.on('error', function(err){
+    //     if (err.name === 'MongoNetworkError') {
+    //         connect();
+    //     }
+    // });
 };
 
 

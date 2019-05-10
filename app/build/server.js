@@ -35,7 +35,7 @@ class Server {
         this.app.set('view engine', '.hbs'); // debe ir luego del seteo anterior
     }
     middlewares() {
-        this.app.use(express_1.default.urlencoded({ extended: false })); // indica que datos se reciben desde formulario (NO imagenes) -> NECESARIO
+        this.app.use(express_1.default.urlencoded({ extended: false })); // indica que datos se reciben desde formulario (NO imagenes) -> config necesaria
         this.app.use(session({
             secret: 'mysecretsession',
             resave: false,

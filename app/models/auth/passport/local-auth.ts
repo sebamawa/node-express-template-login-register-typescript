@@ -40,7 +40,7 @@ passport.use('local-login', new LocalStrategy({
         }
 
         // verifico password
-        console.log(typeof( user.matchPassword(password)) === Promise);
+        //console.log(typeof( user.matchPassword(password)) === Promise);
         let matchPass: boolean = await user.matchPassword(password);
         if (!matchPass) {
             return done(null, false, req.flash('loginMessage', 'Incorrect Password'));
@@ -49,7 +49,7 @@ passport.use('local-login', new LocalStrategy({
         // credenciales de usuario ok
         return done(null, user, req.flash('success_msg', `Bienvenido ${user.name}`)); // se puede agregar mj de logueo ok           
     } catch (err) {
-        //console.log(err);
+        console.log(err);
 
         return done(null, false, req.flash('error_msg', `Error: ${err.name}`));
     }
