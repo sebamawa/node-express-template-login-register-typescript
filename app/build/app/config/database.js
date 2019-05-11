@@ -16,12 +16,8 @@ const properties_1 = __importDefault(require("./properties"));
 exports.default = () => {
     const options = {
         //reconnectTries: 10, // Never stop trying to reconnect
-        useNewUrlParser: true
-        //bufferMaxEntries: 0   
-        // server: {
-        //     reconnectTries: Number.MAX_VALUE,
-        //     reconnectInterval: 1000
-        // }               
+        useNewUrlParser: true,
+        autoReconnect: true,
     };
     const connect = function () {
         return __awaiter(this, void 0, void 0, function* () {
@@ -61,10 +57,16 @@ exports.default = () => {
     mongoose_1.default.connection.on('reconnectFailed', function () {
         console.log('Finalizaron 30 intentos de reconexion. Se intenta de nuevo.');
         //mongoose.connection.close();
+        mongoose_1.default.disconnect();
         connect();
     });
     //    mongoose.connection.on('error', function(){
+    //         mongoose.disconnect();
     //         console.log(`Error`);
+    //     }); 
+    //     mongoose.connection.on('disconnected', function(){
+    //         console.log('MongoDB disconnected!');
+    //         connect();
     //     });    
     // mongoose.connection.on('connected', function(){
     //     isConnectedBefore = true;

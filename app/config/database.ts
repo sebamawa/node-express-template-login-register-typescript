@@ -4,7 +4,9 @@ import config from './properties';
 export default () => {
     const options: ConnectionOptions = {
         //reconnectTries: 10, // Never stop trying to reconnect
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        autoReconnect: true,
+        //bufferMaxEntries: 0
         //bufferMaxEntries: 0   
         // server: {
         //     reconnectTries: Number.MAX_VALUE,
@@ -52,11 +54,18 @@ export default () => {
     mongoose.connection.on('reconnectFailed', function(){
         console.log('Finalizaron 30 intentos de reconexion. Se intenta de nuevo.');
         //mongoose.connection.close();
+        mongoose.disconnect();
         connect();
     });      
 
 //    mongoose.connection.on('error', function(){
+//         mongoose.disconnect();
 //         console.log(`Error`);
+//     }); 
+    
+//     mongoose.connection.on('disconnected', function(){
+//         console.log('MongoDB disconnected!');
+//         connect();
 //     });    
 
     // mongoose.connection.on('connected', function(){
